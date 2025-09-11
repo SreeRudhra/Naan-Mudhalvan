@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Page Portfolio</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f9; }
+    header { background: #4a90e2; color: white; padding: 20px; text-align: center; }
+    nav { margin-top: 10px; }
+    nav button {
+      margin: 5px; padding: 10px 15px;
+      border: none; border-radius: 6px;
+      background: white; color: #4a90e2; font-weight: bold;
+      cursor: pointer; transition: 0.2s;
+    }
+    nav button:hover { background: #4a90e2; color: white; }
+    section { display: none; padding: 30px; text-align: center; }
+    .active { display: block; }
+
+    /* Project cards */
+    .projects { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 20px; }
+    .card {
+      background: white; padding: 20px; border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;
+    }
+    .card:hover { transform: scale(1.05); cursor: pointer; }
+
+    /* Calculator */
+    #calcDisplay { width: 90%; font-size: 20px; margin: 10px; text-align: right; }
+    .row { margin: 5px; }
+    button.calc-btn { padding: 15px; margin: 5px; font-size: 18px; border-radius: 8px; }
+
+    /* To-Do */
+    input.todo { padding: 10px; width: 70%; }
+    button.todo-btn { padding: 10px; margin: 5px; border-radius: 6px; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 5px auto; width: 60%; background: #eee; padding: 10px; border-radius: 6px; cursor: pointer; }
+    li:hover { background: #ddd; }
+
+    /* About Me */
+    .about-box {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    .about-box h3 { margin-top: 0; color: #4a90e2; }
+    .about-box p { line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Portfolio</h1>
+    <p>Single Page Website</p>
+    <nav>
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('about')">About Me</button>
+      <button onclick="showSection('projects')">Projects</button>
+      <button onclick="showSection('calculator')">Calculator</button>
+      <button onclick="showSection('todo')">To-Do App</button>
+    </nav>
+  </header>
+
+  <!-- Home -->
+  <section id="home" class="active">
+    <h2>Welcome!</h2>
+    <p>This is my portfolio home page. Use the navigation buttons to explore my projects.</p>
+  </section>
+
+  <!-- About Me -->
+  <section id="about">
+    <h2>About Me</h2>
+    <div class="about-box">
+      <h3>Hello, I’m Sree Rudhra.B 👋</h3>
+      <p>
+        I am a passionate web developer with an interest in creating clean and interactive web applications.  
+        I enjoy building projects that solve real-world problems and experimenting with new technologies.  
+      </p>
+      <p>
+        <strong>Skills:</strong> HTML, CSS, JavaScript, React, Node.js <br>
+        <strong>Hobbies:</strong> Coding, designing, reading tech blogs, and exploring new ideas.  
+      </p>
+      <p>
+        📧 <strong>Email:</strong> sreerudhrabalamurukan@gmail.com  
+      </p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <h2>My Projects</h2>
+    <div class="projects">
+      <div class="card" onclick="showSection('calculator')">
+        <h3>🧮 Calculator</h3>
+        <p>Simple arithmetic calculator</p>
+      </div>
+      <div class="card" onclick="showSection('todo')">
+        <h3>✅ To-Do App</h3>
+        <p>Manage your tasks easily</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section id="calculator">
+    <h2>Calculator</h2>
+    <input type="text" id="calcDisplay" readonly>
+    <div class="row">
+      <button class="calc-btn" onclick="appendCalc('1')">1</button>
+      <button class="calc-btn" onclick="appendCalc('2')">2</button>
+      <button class="calc-btn" onclick="appendCalc('3')">3</button>
+      <button class="calc-btn" onclick="appendCalc('+')">+</button>
+    </div>
+    <div class="row">
+      <button class="calc-btn" onclick="appendCalc('4')">4</button>
+      <button class="calc-btn" onclick="appendCalc('5')">5</button>
+      <button class="calc-btn" onclick="appendCalc('6')">6</button>
+      <button class="calc-btn" onclick="appendCalc('-')">-</button>
+    </div>
+    <div class="row">
+      <button class="calc-btn" onclick="appendCalc('7')">7</button>
+      <button class="calc-btn" onclick="appendCalc('8')">8</button>
+      <button class="calc-btn" onclick="appendCalc('9')">9</button>
+      <button class="calc-btn" onclick="appendCalc('*')">*</button>
+    </div>
+    <div class="row">
+      <button class="calc-btn" onclick="appendCalc('0')">0</button>
+      <button class="calc-btn" onclick="clearCalc()">C</button>
+      <button class="calc-btn" onclick="calculate()">=</button>
+      <button class="calc-btn" onclick="appendCalc('/')">/</button>
+    </div>
+  </section>
+
+  <!-- To-Do -->
+  <section id="todo">
+    <h2>To-Do App</h2>
+    <input type="text" id="todoInput" class="todo" placeholder="Enter a task">
+    <button class="todo-btn" onclick="addTask()">Add</button>
+    <ul id="todoList"></ul>
+  </section>
+
+  <script>
+    // Navigation
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Calculator
+    function appendCalc(val) {
+      document.getElementById('calcDisplay').value += val;
+    }
+    function clearCalc() {
+      document.getElementById('calcDisplay').value = '';
+    }
+    function calculate() {
+      try {
+        document.getElementById('calcDisplay').value =
+          eval(document.getElementById('calcDisplay').value);
+      } catch {
+        alert("Invalid Expression");
+      }
+    }
+
+    // To-Do
+    function addTask() {
+      let input = document.getElementById('todoInput');
+      let task = input.value.trim();
+      if (task) {
+        let li = document.createElement('li');
+        li.textContent = task;
+        li.onclick = () => li.remove();
+        document.getElementById('todoList').appendChild(li);
+        input.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
